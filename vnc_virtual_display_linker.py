@@ -77,8 +77,8 @@ class ScreenManager:
         conf[orientation].xrandr_mode.alias = self.get_xrandr_mode_alias(conf[orientation].xrandr_mode.data)
 
         os.system("xrandr --newmode " + conf[orientation].xrandr_mode.data + " -hsync +vsync")
-        os.system("xrandr --addmode VIRTUAL1 " + conf[orientation].xrandr_mode.alias)
-        os.system("xrandr --output VIRTUAL1 --mode " + conf[orientation].xrandr_mode.alias)
+        os.system("xrandr --addmode VGA-0 " + conf[orientation].xrandr_mode.alias)
+        os.system("xrandr --output VGA-0 --mode " + conf[orientation].xrandr_mode.alias + " --right-of LVDS")
         os.system('xrandr')
 
         self.conf[self.get_orientation].is_monitor_created = True
@@ -87,13 +87,13 @@ class ScreenManager:
         orientation = self.get_orientation()
         conf = self.conf
 
-        os.system("xrandr --output VIRTUAL1 --off")
-        os.system("xrandr --delmode VIRTUAL1 " + conf[orientation].xrandr_mode.alias)
+        os.system("xrandr --output VGA-0 --off")
+        os.system("xrandr --delmode VGA-0 " + conf[orientation].xrandr_mode.alias)
         os.system('xrandr')
         self.conf[self.get_orientation].is_monitor_created = False
 
     def start_vnc(self):
-        os.system("x11vnc -nocursorshape -nocursorpos -noxinerama -solid -repeat -forever -clip " + self.conf[self.get_orientation()].x11vnc_clip)
+        os.system("x11vnc -usepw -snapfb -nonap -ping 2 -sb 0 -nocursorshape -noxinerama -solid -repeat -forever -clip " + self.conf[self.get_orientation()].x11vnc_clip)
 
     def toggle_orientation(self):
         self.delete_monitor()
@@ -198,3 +198,10 @@ menu_actions = {
 if __name__ == "__main__":
     # Launch main menu
     main_menu()
+    #screen_manager = ScreenManager()
+    #screen_manager.adb_port_forwarding()
+    #screen_manager.start_vnc()
+    #screen_manager.delete_monitor()
+    
+    
+    
